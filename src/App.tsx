@@ -1,18 +1,121 @@
-import React from 'react';
-import { SafeAreaView, useColorScheme } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { useColorScheme, View, StyleSheet } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import RNFS from 'react-native-fs';
+import Loading from './common/Loading';
+import EmptyRestApiForm from './wrappers/EmptyRestApiForm';
+import Wrapper from './wrappers/Wrapper';
+import Utils from './utils/utils';
+import DeviceInfo from 'react-native-device-info';
+import { Data, DataChild } from './types/data';
+import ApiRequest from './utils/apiRequest'
+import config from '../config';
+import Geolocation from 'react-native-geolocation-service';
 
-const App = (): JSX.Element => {
-  const isDarkMode = useColorScheme() === 'dark';
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    textAlign: 'center'
+  },
+  horizontal: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    padding: 20
+  }
+});
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+let lastFailed = false;
+const utils = new Utils();
+const apiRequest = new ApiRequest();
+
+const getApiURL = async (setApiURL: (url: string) => void, setLoadingURL: (loading: boolean) => void, setGotApiURL: (loading: boolean) => void) => {
+  try {
+    const exists = await RNFS.exists(RNFS.DocumentDirectoryPath + "/api.txt");
+    if (exists) {
+      const file = await RNFS.readFile(RNFS.DocumentDirectoryPath + "/api.txt");
+      setApiURL(file.toString());
+      setLoadingURL(false);
+      if(utils.isValidUrl(file.toString())){
+        setGotApiURL(true);
+      }
+    } else {
+      RNFS.writeFile(RNFS.DocumentDirectoryPath + "/api.txt", '', 'utf8').then(() => { }).catch(() => { }).finally(() => { setLoadingURL(false); });
+    }
+  } catch (e) {
+    setLoadingURL(false);
+  }
+}
+
+const saveApiURL = (url: string, setGotApiURL: (loading: boolean) => void) => {
+  if(!utils.isValidUrl(url)){
+    return;
+  }
+
+  try {
+    RNFS.writeFile(RNFS.DocumentDirectoryPath + "/api.txt", url, 'utf8').then(() => {
+      setGotApiURL(true);
+    }).catch(() => { 
+      return;
+     });
+  } catch(e){
+    return;
+  }
+}
+
+const intervalLogic = (data: Data, url: string, first?: boolean) => {
+  let newData: DataChild = {
+    battery: Math.floor(DeviceInfo.getBatteryLevelSync() * 100)
+  }
+
+  if(JSON.stringify(newData) === JSON.stringify(data.data) && !first && !lastFailed) {
+    data.setData({...newData});
+    return;
+  }
+
+  lastFailed = false;
+  data.setData({...newData});
+  apiRequest.sendRequest(url, "POST", newData, config.AUTH, (data) => {
+    console.log("Success sending") // TODO: succes communicate logic
+  }, (error) => {
+    console.log("Failure sending") // TODO: failure communicate logic
+    lastFailed = true;
+  })
+}
+
+const App = () => {
+  const [isDarkMode, setIsDarkMode] = useState(useColorScheme() === 'dark');
+  const [apiURL, setApiURL] = useState("");
+  const [loadingURL, setLoadingURL] = useState(true);
+  const [gotApiURL, setGotApiURL] = useState(false);
+  const [sliderValue, setSliderValue] = useState(1000); // in miliseconds
+  const [intervalId, setIntervalID] = useState<any>();
+  const [data, setData] = useState({
+    battery: Math.floor(DeviceInfo.getBatteryLevelSync() * 100),
+    // TODO: add geolocation
+  })
+
+  useEffect(() => {
+    getApiURL(setApiURL, setLoadingURL, setGotApiURL);
+  }, [])
+
+  if (loadingURL) return (
+    <View style={[styles.container, styles.horizontal, { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter }]}>
+      <Loading text={"Loading API URL"} />
+    </View>
+  )
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-
-    </SafeAreaView>
+    <View style={{
+      backgroundColor: isDarkMode ? Colors.darker : Colors.lighter
+    }}>
+      {apiURL === "" || !gotApiURL ? 
+      <EmptyRestApiForm apiURL={apiURL} setApiURL={setApiURL} setGotApiURL={setGotApiURL} saveApiURL={saveApiURL} /> : 
+      <Wrapper apiURL={apiURL} setApiURL={setApiURL} setGotApiURL={setGotApiURL} saveApiURL={saveApiURL} intervalId={intervalId} setIntervalID={setIntervalID} sliderValue={sliderValue} setSliderValue={setSliderValue} intervalLogic={intervalLogic} data={{
+        data,
+        setData
+      }} /> }
+    </View>
   );
 }
 

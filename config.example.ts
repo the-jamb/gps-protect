@@ -1,6 +1,7 @@
 const config = {
-    APP_NAME: "template",
-    NODE_ENV: "development"
+    REGISTER_ROOT: "template",
+    NODE_ENV: "development",
+    AUTH: "development"
 }
 
 export default config;
