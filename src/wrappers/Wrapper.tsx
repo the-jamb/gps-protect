@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, TextInput, Dimensions, View, ScrollView, Text } from 'react-native';
 import Loading from "../common/Loading";
 import RNFS from 'react-native-fs';
-import Slider from '@react-native-community/slider';
 import { Data } from "../types/data";
 import Chip from "../common/Chip";
 
@@ -170,16 +169,8 @@ const Wrapper = ({apiURL, setApiURL, setGotApiURL, saveApiURL, intervalId, setIn
                 value={apiURL}
                 placeholder="Api URL"
             />
-            <View style={{ padding: 20}}>
-                <Slider
-                    value={sliderValue}
-                    minimumValue={1000}
-                    maximumValue={60000}
-                    onSlidingComplete={(value) => {
-                        setSliderValue(value);
-                        setCompleted(true);
-                    }}
-                />  
+            <View>
+                <Text style={styles.text}>Milisecond interval</Text>
 
                 <TextInput
                     style={styles.input}
