@@ -187,8 +187,8 @@ const Wrapper = ({apiURL, setApiURL, setGotApiURL, saveApiURL, intervalId, setIn
             <View style={styles.dataContainer}>
                 <Chip item={styles.item} text={styles.text} data={data.data.battery + "%"} dataText={"Battery level:"} />
                 <Chip item={styles.item} text={styles.text} dataArr={["Lat: " + data.data.location.coords.latitude, "Long: " + data.data.location.coords.longitude]} dataText={"Coordinates:"} />
-                <Chip item={styles.item} text={styles.text} data={data.data.location.coords.altitude} dataText={"Altitude:"} />
-                <Chip item={styles.item} text={styles.text} data={data.data.location.coords.speed} dataText={"Speed:"} />
+                <Chip item={styles.item} text={styles.text} dataArr={[data.data.location.coords.altitude?.toString()]} dataText={"Altitude:"} />
+                <Chip item={styles.item} text={styles.text} dataArr={[data.data.location.coords.speed?.toString()]} dataText={"Speed:"} />
                 <Chip item={styles.item} text={styles.text} dataArr={["X: " + data.accelerometerState.x, "Y: " + data.accelerometerState.y, "Z: " + data.accelerometerState.z]} dataText={"Accelerometer:"} />
                 <Chip item={styles.item} text={styles.text} dataArr={["X: " + data.gyroscopeState.x, "Y: " + data.gyroscopeState.y, "Z: " + data.gyroscopeState.z]} dataText={"Gyroscope:"} />
                 <Chip item={styles.item} text={styles.text} dataArr={["X: " + data.orientationState.qx, "Y: " + data.orientationState.qy, "Z: " + data.orientationState.qz, "W: " + data.orientationState.qw]} dataText={"Quaternion: "} />

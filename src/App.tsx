@@ -68,6 +68,11 @@ const intervalLogic = (data: Data, url: string, first?: boolean) => {
   Geolocation.getCurrentPosition(
     position => {
       if(position) {
+        position.coords.altitude = Number(position?.coords?.altitude?.toFixed(5))
+        position.coords.speed = Number(position?.coords?.speed?.toFixed(5))
+        position.coords.latitude = Number(position?.coords?.latitude?.toFixed(5))
+        position.coords.longitude = Number(position?.coords?.longitude?.toFixed(5))
+
         let newData: DataChild = {
           battery: Math.floor(DeviceInfo.getBatteryLevelSync() * 100),
           location: position,

@@ -6,11 +6,11 @@ type Props = {
     text?: any;
     data?: string | number | boolean | null;
     dataText: string;
-    dataArr?: string[]
+    dataArr?: Array<string | undefined>;
 }
 
-const returnTextsFromArr = (arr: string[], text?: any) => {
-    return arr.map((el: string) => {
+const returnTextsFromArr = (arr: Array<string | undefined>, text?: any) => {
+    return arr.map((el: string | undefined) => {
         return <Text key={el} style={text}> {el} </Text>
     })
 }
