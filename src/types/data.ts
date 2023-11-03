@@ -1,6 +1,6 @@
 import { GeoPosition } from "react-native-geolocation-service"
 
-export type Accelometer = {
+export type Axis = {
     x: number;
     y: number;
     z: number;
@@ -9,10 +9,13 @@ export type Accelometer = {
 export type DataChild = {
     battery: number,
     location: GeoPosition
-    accelerometerState: Accelometer
+    accelerometerState: Axis
+    gyroscopeState: Axis
 }
 
 export type Data = {
     data: DataChild,
     setData: (d: DataChild) => void,
+    gyroscopeState: Axis,
+    accelerometerState: Axis
 }

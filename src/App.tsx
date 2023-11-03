@@ -71,11 +71,11 @@ const intervalLogic = (data: Data, url: string, first?: boolean) => {
         let newData: DataChild = {
           battery: Math.floor(DeviceInfo.getBatteryLevelSync() * 100),
           location: position,
-          accelerometerState: data.data.accelerometerState
+          accelerometerState: data.accelerometerState,
+          gyroscopeState: data.gyroscopeState
         }
 
         data.setData({...newData});
-        console.log(newData)
         if(JSON.stringify(newData) === JSON.stringify(data.data) && !first && !lastFailed) {
           return;
         }
@@ -129,19 +129,40 @@ const App = () => {
       x: 0,
       y: 0,
       z: 0
+    },
+    gyroscopeState: {
+      x: 0,
+      y: 0,
+      z: 0
     }
+  })
+
+  const [accelerometerState, setAccelerometerState] = useState({
+    x: 0,
+    y: 0,
+    z: 0
+  })
+
+  const [gyroscopeState, setGyroscopeState] = useState({
+    x: 0,
+    y: 0,
+    z: 0
   })
 
   useEffect(() => {
     getApiURL(setApiURL, setLoadingURL, setGotApiURL);
     setUpdateIntervalForType(SensorTypes.accelerometer, 500)
-    accelerometer.subscribe(({ x, y, z, timestamp }) => {
-      let dataCopy = {...data}
-      dataCopy.accelerometerState = {
-        x,y,z
-      }
+    setUpdateIntervalForType(SensorTypes.gyroscope, 500)
+    accelerometer.subscribe(({ x, y, z }) => {
+      setAccelerometerState({
+        x, y, z
+      })
+    });
 
-      setData(dataCopy)
+    gyroscope.subscribe(({ x, y, z }) => {
+      setGyroscopeState({
+        x, y, z
+      })
     });
   }, [])
 
@@ -159,7 +180,9 @@ const App = () => {
       <EmptyRestApiForm apiURL={apiURL} setApiURL={setApiURL} setGotApiURL={setGotApiURL} saveApiURL={saveApiURL} /> : 
       <Wrapper apiURL={apiURL} setApiURL={setApiURL} setGotApiURL={setGotApiURL} saveApiURL={saveApiURL} intervalId={intervalId} setIntervalID={setIntervalID} sliderValue={sliderValue} setSliderValue={setSliderValue} intervalLogic={intervalLogic} data={{
         data,
-        setData
+        setData,
+        accelerometerState,
+        gyroscopeState
       }} /> }
     </View>
   );

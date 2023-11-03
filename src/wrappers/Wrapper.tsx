@@ -198,7 +198,8 @@ const Wrapper = ({apiURL, setApiURL, setGotApiURL, saveApiURL, intervalId, setIn
                 <Chip item={styles.item} text={styles.text} dataArr={["Lat: " + data.data.location.coords.latitude, "Long: " + data.data.location.coords.longitude]} dataText={"Coordinates:"} />
                 <Chip item={styles.item} text={styles.text} data={data.data.location.coords.altitude} dataText={"Altitude:"} />
                 <Chip item={styles.item} text={styles.text} data={data.data.location.coords.speed} dataText={"Speed:"} />
-                <Chip item={styles.item} text={styles.text} dataArr={["X: " + data.data.accelerometerState.x, "Y: " + data.data.accelerometerState.y, "Z: " + data.data.accelerometerState.z]} dataText={"Accelerometer:"} />
+                <Chip item={styles.item} text={styles.text} dataArr={["X: " + data.accelerometerState.x, "Y: " + data.accelerometerState.y, "Z: " + data.accelerometerState.z]} dataText={"Accelerometer:"} />
+                <Chip item={styles.item} text={styles.text} dataArr={["X: " + data.gyroscopeState.x, "Y: " + data.gyroscopeState.y, "Z: " + data.gyroscopeState.z]} dataText={"Gyroscope:"} />
             </View>
         </ScrollView>
     )
