@@ -11,7 +11,7 @@ type Props = {
 
 const returnTextsFromArr = (arr: string[], text?: any) => {
     return arr.map((el: string) => {
-        return <Text style={text}> {el} </Text>
+        return <Text key={el} style={text}> {el} </Text>
     })
 }
 
