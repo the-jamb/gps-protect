@@ -6,16 +6,28 @@ export type Axis = {
     z: number;
 }
 
+export type OrientationProps = {
+    qx: number; 
+    qy: number; 
+    qz: number;
+    qw: number; 
+    pitch: number;
+    roll: number;
+    yaw: number;
+}
+
 export type DataChild = {
-    battery: number,
-    location: GeoPosition
-    accelerometerState: Axis
-    gyroscopeState: Axis
+    battery: number;
+    location: GeoPosition;
+    accelerometerState: Axis;
+    gyroscopeState: Axis;
+    orientation: OrientationProps;
 }
 
 export type Data = {
-    data: DataChild,
-    setData: (d: DataChild) => void,
-    gyroscopeState: Axis,
-    accelerometerState: Axis
+    data: DataChild;
+    setData: (d: DataChild) => void;
+    gyroscopeState: Axis;
+    accelerometerState: Axis;
+    orientationState: OrientationProps
 }

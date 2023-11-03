@@ -72,7 +72,8 @@ const intervalLogic = (data: Data, url: string, first?: boolean) => {
           battery: Math.floor(DeviceInfo.getBatteryLevelSync() * 100),
           location: position,
           accelerometerState: data.accelerometerState,
-          gyroscopeState: data.gyroscopeState
+          gyroscopeState: data.gyroscopeState,
+          orientation: data.orientationState
         }
 
         data.setData({...newData});
@@ -134,36 +135,62 @@ const App = () => {
       x: 0,
       y: 0,
       z: 0
+    },
+    orientation: {
+      qx: 0, 
+      qy: 0, 
+      qz: 0, 
+      qw: 0, 
+      pitch: 0, 
+      roll: 0, 
+      yaw: 0
     }
   })
 
-  const [accelerometerState, setAccelerometerState] = useState({
-    x: 0,
-    y: 0,
-    z: 0
-  })
+  const [accelerometerState, setAccelerometerState] = useState(data.accelerometerState)
 
-  const [gyroscopeState, setGyroscopeState] = useState({
-    x: 0,
-    y: 0,
-    z: 0
-  })
+  const [gyroscopeState, setGyroscopeState] = useState(data.gyroscopeState)
+
+  const [orientationState, setOrientationState] = useState(data.orientation)
 
   useEffect(() => {
     getApiURL(setApiURL, setLoadingURL, setGotApiURL);
     setUpdateIntervalForType(SensorTypes.accelerometer, 500)
     setUpdateIntervalForType(SensorTypes.gyroscope, 500)
+    setUpdateIntervalForType(SensorTypes.orientation, 500)
     accelerometer.subscribe(({ x, y, z }) => {
+      x = Number(x.toFixed(5))
+      y = Number(y.toFixed(5))
+      z = Number(z.toFixed(5))
+
       setAccelerometerState({
         x, y, z
       })
     });
 
     gyroscope.subscribe(({ x, y, z }) => {
+      x = Number(x.toFixed(5))
+      y = Number(y.toFixed(5))
+      z = Number(z.toFixed(5))
+
       setGyroscopeState({
         x, y, z
       })
     });
+    
+    orientation.subscribe(({ qx, qy, qz, qw, pitch, roll, yaw }) => {
+      qx = Number(qx.toFixed(5))
+      qy = Number(qy.toFixed(5))
+      qz = Number(qz.toFixed(5))
+      qw = Number(qw.toFixed(5))
+      pitch = Number(pitch.toFixed(5))
+      roll = Number(roll.toFixed(5))
+      yaw = Number(yaw.toFixed(5))
+      
+      setOrientationState({
+        qx, qy, qz, qw, pitch, roll, yaw
+      })
+    })
   }, [])
 
   if (loadingURL) return (
@@ -182,7 +209,8 @@ const App = () => {
         data,
         setData,
         accelerometerState,
-        gyroscopeState
+        gyroscopeState,
+        orientationState
       }} /> }
     </View>
   );
