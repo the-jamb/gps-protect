@@ -185,7 +185,7 @@ const Wrapper = ({apiURL, setApiURL, setGotApiURL, saveApiURL, intervalId, setIn
                 />
             </View>
             <View style={styles.dataContainer}>
-                <Chip item={styles.item} text={styles.text} data={data.data.battery + "%"} dataText={"Battery level:"} />
+                <Chip item={styles.item} text={styles.text} dataArr={[data.data.battery.level + "%", data.data.battery.isCharging ? "Charging" : "Not charging"]} dataText={"Battery:"} />
                 <Chip item={styles.item} text={styles.text} dataArr={["Lat: " + data.data.location.coords.latitude, "Long: " + data.data.location.coords.longitude]} dataText={"Coordinates:"} />
                 <Chip item={styles.item} text={styles.text} dataArr={[data.data.location.coords.altitude?.toString()]} dataText={"Altitude:"} />
                 <Chip item={styles.item} text={styles.text} dataArr={[data.data.location.coords.speed?.toString()]} dataText={"Speed:"} />

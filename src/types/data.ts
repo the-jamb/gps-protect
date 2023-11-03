@@ -16,8 +16,13 @@ export type OrientationProps = {
     yaw: number;
 }
 
+export type Battery = {
+    level: number;
+    isCharging: boolean
+}
+
 export type DataChild = {
-    battery: number;
+    battery: Battery;
     location: GeoPosition;
     accelerometerState: Axis;
     gyroscopeState: Axis;

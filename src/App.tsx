@@ -74,7 +74,10 @@ const intervalLogic = (data: Data, url: string, first?: boolean) => {
         position.coords.longitude = Number(position?.coords?.longitude?.toFixed(5))
 
         let newData: DataChild = {
-          battery: Math.floor(DeviceInfo.getBatteryLevelSync() * 100),
+          battery: {
+            level: Math.floor(DeviceInfo.getBatteryLevelSync() * 100),
+            isCharging: DeviceInfo.isBatteryChargingSync()
+          },
           location: position,
           accelerometerState: data.accelerometerState,
           gyroscopeState: data.gyroscopeState,
@@ -116,7 +119,10 @@ const App = () => {
   const [sliderValue, setSliderValue] = useState(1000); // in miliseconds
   const [intervalId, setIntervalID] = useState<any>();
   const [data, setData] = useState<DataChild>({
-    battery: Math.floor(DeviceInfo.getBatteryLevelSync() * 100),
+    battery: {
+      level: Math.floor(DeviceInfo.getBatteryLevelSync() * 100),
+      isCharging: DeviceInfo.isBatteryChargingSync()
+    },
     location: {
       coords: {
         latitude: 0,
