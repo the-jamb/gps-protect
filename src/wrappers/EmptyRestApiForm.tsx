@@ -1,5 +1,6 @@
 import React from "react";
 import { SafeAreaView, StyleSheet, TextInput, Button, View, Dimensions } from 'react-native';
+import { openSettings } from 'react-native-permissions';
 import Utils from "../utils/utils";
 
 type Props = {
@@ -35,6 +36,9 @@ const EmptyRestApiForm = ({apiURL, setApiURL, setGotApiURL, saveApiURL}: Props) 
                 placeholder="Api URL"
             />
             <View style={{margin:10}}>
+                <Button title={"Allow geolocation in background"} onPress={() => {
+                    openSettings();
+                }} />
                 <Button title={"Save API URL"} disabled={!utils.isValidUrl(apiURL)} onPress={() => saveApiURL(apiURL, setGotApiURL)} />
             </View>
         </SafeAreaView>

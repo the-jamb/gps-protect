@@ -5896,6 +5896,11 @@ react-native-geolocation-service@^5.3.1:
   resolved "https://registry.yarnpkg.com/react-native-geolocation-service/-/react-native-geolocation-service-5.3.1.tgz#4ce1017789da6fdfcf7576eb6f59435622af4289"
   integrity sha512-LTXPtPNmrdhx+yeWG47sAaCgQc3nG1z+HLLHlhK/5YfOgfLcAb9HAkhREPjQKPZOUx8pKZMIpdGFUGfJYtimXQ==
 
+react-native-permissions@^3.10.1:
+  version "3.10.1"
+  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-3.10.1.tgz#cb0171c8d12113869deaabbdfb979aad1a44752b"
+  integrity sha512-Gc5BxxpjZn4QNUDiVeHOO0vXh3AH7ToolmwTJozqC6DsxV7NAf3ttap+8BSmzDR8WxuAM3Cror+YNiBhHJx7/w==
+
 react-native-sensors@^7.3.6:
   version "7.3.6"
   resolved "https://registry.yarnpkg.com/react-native-sensors/-/react-native-sensors-7.3.6.tgz#147dea0d33227e46d3c2b34802b6945f5ce56dc6"
