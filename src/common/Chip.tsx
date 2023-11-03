@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 type Props = {
     item?: any;
     text?: any;
-    data?: string | number | boolean;
+    data?: string | number | boolean | null;
     dataText: string;
     dataArr?: string[]
 }

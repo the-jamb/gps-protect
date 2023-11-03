@@ -196,7 +196,7 @@ const Wrapper = ({apiURL, setApiURL, setGotApiURL, saveApiURL, intervalId, setIn
             <View style={styles.dataContainer}>
                 <Chip item={styles.item} text={styles.text} data={data.data.battery + "%"} dataText={"Battery level:"} />
                 <Chip item={styles.item} text={styles.text} dataArr={["Lat: " + data.data.location.coords.latitude, "Long: " + data.data.location.coords.longitude]} dataText={"Coordinates:"} />
-                <Chip item={styles.item} text={styles.text} data={data.data.battery} dataText={"Battery level:"} />
+                <Chip item={styles.item} text={styles.text} data={data.data.location.coords.altitude} dataText={"Altitude:"} />
                 <Chip item={styles.item} text={styles.text} data={data.data.battery} dataText={"Battery level:"} />
             </View>
         </ScrollView>
