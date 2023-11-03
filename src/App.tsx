@@ -64,23 +64,40 @@ const saveApiURL = (url: string, setGotApiURL: (loading: boolean) => void) => {
 }
 
 const intervalLogic = (data: Data, url: string, first?: boolean) => {
-  let newData: DataChild = {
-    battery: Math.floor(DeviceInfo.getBatteryLevelSync() * 100)
-  }
+  Geolocation.getCurrentPosition(
+    position => {
+      if(position) {
+        let newData: DataChild = {
+          battery: Math.floor(DeviceInfo.getBatteryLevelSync() * 100),
+          location: position
+        }
 
-  if(JSON.stringify(newData) === JSON.stringify(data.data) && !first && !lastFailed) {
-    data.setData({...newData});
-    return;
-  }
-
-  lastFailed = false;
-  data.setData({...newData});
-  apiRequest.sendRequest(url, "POST", newData, config.AUTH, (data) => {
-    console.log("Success sending") // TODO: succes communicate logic
-  }, (error) => {
-    console.log("Failure sending") // TODO: failure communicate logic
-    lastFailed = true;
-  })
+        data.setData({...newData});
+        console.log(newData)
+        if(JSON.stringify(newData) === JSON.stringify(data.data) && !first && !lastFailed) {
+          return;
+        }
+      
+        lastFailed = false;
+        apiRequest.sendRequest(url, "POST", newData, config.AUTH, (data) => {
+          console.log("Success sending") // TODO: succes communicate logic
+        }, (error) => {
+          console.log("Failure sending") // TODO: failure communicate logic
+          lastFailed = true;
+        })
+      }
+    },
+    () => {
+      console.log("Failure sending") // TODO: failure communicate logic
+      lastFailed = true;
+      return
+    },
+    {
+      enableHighAccuracy: true, 
+      timeout: 1000, 
+      maximumAge: 10000
+    }
+  )
 }
 
 const App = () => {
@@ -90,9 +107,22 @@ const App = () => {
   const [gotApiURL, setGotApiURL] = useState(false);
   const [sliderValue, setSliderValue] = useState(1000); // in miliseconds
   const [intervalId, setIntervalID] = useState<any>();
-  const [data, setData] = useState({
+  const [data, setData] = useState<DataChild>({
     battery: Math.floor(DeviceInfo.getBatteryLevelSync() * 100),
-    // TODO: add geolocation
+    location: {
+      coords: {
+        latitude: 0,
+        longitude: 0,
+        accuracy: 0,
+        altitude: 0,
+        heading: 0,
+        speed: 0,
+        altitudeAccuracy: 0
+      },
+      timestamp: new Date().getTime(),
+      mocked: true,
+      provider: "passive"
+    }
   })
 
   useEffect(() => {

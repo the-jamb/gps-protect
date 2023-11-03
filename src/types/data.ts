@@ -1,5 +1,8 @@
+import { GeoPosition } from "react-native-geolocation-service"
+
 export type DataChild = {
-    battery: number
+    battery: number,
+    location: GeoPosition
 }
 
 export type Data = {

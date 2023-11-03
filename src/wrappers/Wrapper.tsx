@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, TextInput, Dimensions, View, ScrollView, Text } from 'react-native';
+import { StyleSheet, TextInput, Dimensions, View, ScrollView } from 'react-native';
 import Loading from "../common/Loading";
 import RNFS from 'react-native-fs';
 import Slider from '@react-native-community/slider';
 import { Data } from "../types/data";
+import Chip from "../common/Chip";
 
 type Props = {
     apiURL: string,
@@ -50,7 +51,8 @@ const styles = StyleSheet.create({
         height: 120,
         margin: 10,
         alignContent: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        textAlign: "center"
       },
       text: {
         color: '#000',
@@ -192,12 +194,10 @@ const Wrapper = ({apiURL, setApiURL, setGotApiURL, saveApiURL, intervalId, setIn
                 />
             </View>
             <View style={styles.dataContainer}>
-                <View style={styles.item}>
-                    <Text style={styles.text}> Battery level: {data.data.battery}% </Text>
-                </View>
-                <View style={styles.item}>
-                    
-                </View>
+                <Chip item={styles.item} text={styles.text} data={data.data.battery + "%"} dataText={"Battery level:"} />
+                <Chip item={styles.item} text={styles.text} dataArr={["Lat: " + data.data.location.coords.latitude, "Long: " + data.data.location.coords.longitude]} dataText={"Coordinates:"} />
+                <Chip item={styles.item} text={styles.text} data={data.data.battery} dataText={"Battery level:"} />
+                <Chip item={styles.item} text={styles.text} data={data.data.battery} dataText={"Battery level:"} />
             </View>
         </ScrollView>
     )
