@@ -11,6 +11,7 @@ import { Data, DataChild } from './types/data';
 import ApiRequest from './utils/apiRequest'
 import config from '../config';
 import Geolocation from 'react-native-geolocation-service';
+import { accelerometer, gyroscope, orientation, setUpdateIntervalForType, SensorTypes  } from "react-native-sensors";
 
 const styles = StyleSheet.create({
   container: {
@@ -69,7 +70,8 @@ const intervalLogic = (data: Data, url: string, first?: boolean) => {
       if(position) {
         let newData: DataChild = {
           battery: Math.floor(DeviceInfo.getBatteryLevelSync() * 100),
-          location: position
+          location: position,
+          accelerometerState: data.data.accelerometerState
         }
 
         data.setData({...newData});
@@ -122,11 +124,25 @@ const App = () => {
       timestamp: new Date().getTime(),
       mocked: true,
       provider: "passive"
+    },
+    accelerometerState: {
+      x: 0,
+      y: 0,
+      z: 0
     }
   })
 
   useEffect(() => {
     getApiURL(setApiURL, setLoadingURL, setGotApiURL);
+    setUpdateIntervalForType(SensorTypes.accelerometer, 500)
+    accelerometer.subscribe(({ x, y, z, timestamp }) => {
+      let dataCopy = {...data}
+      dataCopy.accelerometerState = {
+        x,y,z
+      }
+
+      setData(dataCopy)
+    });
   }, [])
 
   if (loadingURL) return (
